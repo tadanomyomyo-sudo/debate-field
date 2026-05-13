@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Debate Field 🌸</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fff9f5;
+  --peach: #ffb3a0;
+  --pink: #ff8fab;
+  --mint: #b5ead7;
+  --lavender: #c9b8ff;
+  --yellow: #ffd166;
+  --sky: #a8dadc;
+  --text: #3d2b3d;
+  --text-mid: #7a6178;
+  --text-light: #b8a8b8;
+  --card: #ffffff;
+  --border: #ffe0e8;
+  --radius: 24px;
+  --radius-sm: 16px;
+  --shadow: 0 6px 24px rgba(255,143,171,0.15);
+  --shadow-card: 0 4px 0 rgba(255,143,171,0.25);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(255,179,160,0.2) 0%, transparent 40%),
+    radial-gradient(circle at 90% 90%, rgba(201,184,255,0.2) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(181,234,215,0.15) 0%, transparent 60%);
+}
+
+/* Floating deco */
+.deco {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  font-size: 20px;
+  opacity: 0.15;
+  animation: float 6s ease-in-out infinite;
+}
+.deco:nth-child(1) { top:5%; left:3%; animation-delay:0s; }
+.deco:nth-child(2) { top:15%; right:5%; animation-delay:1s; }
+.deco:nth-child(3) { bottom:20%; left:5%; animation-delay:2s; }
+.deco:nth-child(4) { bottom:10%; right:8%; animation-delay:3s; }
+.deco:nth-child(5) { top:50%; left:1%; animation-delay:1.5s; }
+@keyframes float { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-12px) rotate(5deg)} }
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 16px 80px;
+}
+
+/* HEADER */
+.header {
+  text-align: center;
+  padding: 28px 0 20px;
+}
+
+.header-emoji {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 8px;
+  animation: bounce 2s ease-in-out infinite;
+}
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+.header h1 {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: clamp(36px, 8vw, 64px);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--pink), var(--lavender), var(--peach));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 6px;
+}
+
+.header p {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-mid);
+}
+
+/* NAV */
+.nav-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-tab {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 100px;
+  border: 2px solid var(--border);
+  background: white;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-tab:hover { border-color: var(--pink); color: var(--pink); }
+.nav-tab.active { background: var(--pink); color: white; border-color: var(--pink); box-shadow: 0 3px 0 rgba(255,143,171,0.4); }
+
+/* SCREENS */
+.screen { display: none; animation: popIn 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+.screen.active { display: block; }
+@keyframes popIn { from{opacity:0;transform:scale(0.94) translateY(10px)} to{opacity:1;transform:scale(1) translateY(0)} }
+
+/* SECTION TITLE */
+.section-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--pink);
+  margin-bottom: 16px;
+}
+
+/* CHARACTER CARDS */
+.chars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.char-card {
+  background: white;
+  border: 3px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: var(--shadow);
+  position: relative;
+  text-align: center;
+}
+.char-card:hover { transform: translateY(-4px); border-color: var(--pink); box-shadow: 0 10px 32px rgba(255,143,171,0.25); }
+.char-card.selected { border-color: var(--pink); background: #fff5f8; box-shadow: 0 0 0 3px rgba(255,143,171,0.2); transform: translateY(-2px); }
+.char-card.selected::after { content:'✓'; position:absolute; top:10px; right:12px; width:22px; height:22px; background:var(--pink); color:white; border-radius:50%; font-size:11px; font-weight:800; display:grid; place-items:center; }
+
+.char-emoji { font-size: 40px; display:block; margin-bottom:8px; }
+.char-name { font-family:'Baloo 2',sans-serif; font-size:18px; font-weight:700; color:var(--text); margin-bottom:2px; }
+.char-role { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text-light); margin-bottom:8px; }
+.char-desc { font-size:11px; color:var(--text-mid); line-height:1.6; font-weight:600; }
+
+.level-badge {
+  display:inline-block; font-size:10px; font-weight:800;
+  padding:3px 10px; border-radius:100px; margin-bottom:8px; letter-spacing:1px;
+}
+.lv-a1 { background:#fce4ec; color:#c2185b; border:2px solid #f48fb1; }
+.lv-a2 { background:#e8f5e9; color:#2e7d32; border:2px solid #a5d6a7; }
+.lv-b1 { background:#e3f2fd; color:#1565c0; border:2px solid #90caf9; }
+.lv-b2 { background:#fff8e1; color:#e65100; border:2px solid #ffcc02; }
+.lv-c1 { background:#f3e5f5; color:#6a1b9a; border:2px solid #ce93d8; }
+
+/* BUTTONS */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  font-family:'Quicksand',sans-serif; font-size:14px; font-weight:700;
+  padding:12px 26px; border-radius:100px; border:none; cursor:pointer; transition:all 0.15s;
+}
+.btn-primary { background:linear-gradient(135deg,var(--pink),var(--peach)); color:white; box-shadow:0 4px 0 rgba(255,143,171,0.5); }
+.btn-primary:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 6px 0 rgba(255,143,171,0.5); }
+.btn-primary:active:not(:disabled) { transform:translateY(2px); box-shadow:0 2px 0 rgba(255,143,171,0.5); }
+.btn-primary:disabled { opacity:0.4; cursor:not-allowed; }
+.btn-ghost { background:white; color:var(--text-mid); border:2px solid var(--border); box-shadow:0 3px 0 var(--border); }
+.btn-ghost:hover { border-color:var(--pink); color:var(--pink); transform:translateY(-1px); }
+.btn-ghost:active { transform:translateY(2px); }
+.btn-mint { background:linear-gradient(135deg,#52c9a0,#38b589); color:white; box-shadow:0 4px 0 rgba(82,201,160,0.4); }
+.btn-mint:hover:not(:disabled) { transform:translateY(-2px); }
+.btn-mint:disabled { opacity:0.4; cursor:not-allowed; }
+
+/* STANCE SCREEN */
+.stance-card {
+  background:white; border:3px solid var(--border); border-radius:var(--radius);
+  padding:20px; margin-bottom:16px; box-shadow:var(--shadow);
+}
+.stance-topic-label { font-size:10px; font-weight:700; letter-spacing:3px; color:var(--pink); text-transform:uppercase; margin-bottom:8px; }
+.stance-topic { font-family:'Baloo 2',sans-serif; font-size:18px; font-weight:700; color:var(--text); line-height:1.4; }
+
+.stance-btns { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.stance-btn {
+  padding:18px 12px; border-radius:var(--radius-sm); border:3px solid var(--border);
+  background:white; cursor:pointer; transition:all 0.2s; text-align:center;
+  font-family:'Quicksand',sans-serif; font-weight:700;
+}
+.stance-btn:hover { transform:translateY(-3px); }
+.stance-btn.for:hover, .stance-btn.for.picked { border-color:#52c9a0; background:#f0fdf8; }
+.stance-btn.against:hover, .stance-btn.against.picked { border-color:var(--peach); background:#fff8f5; }
+.stance-btn-emoji { font-size:28px; display:block; margin-bottom:6px; }
+.stance-btn-label { font-size:14px; color:var(--text); }
+.stance-btn-sub { font-size:10px; color:var(--text-light); margin-top:2px; }
+
+/* DEBATE SCREEN */
+.battle-top {
+  background:white; border:3px solid var(--border); border-radius:var(--radius);
+  padding:14px 18px; margin-bottom:12px; box-shadow:var(--shadow);
+  display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px;
+}
+.fighter { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.fighter-emoji { font-size:32px; }
+.fighter-name { font-family:'Baloo 2',sans-serif; font-size:14px; font-weight:700; color:var(--text); }
+.fighter-label { font-size:9px; font-weight:700; letter-spacing:2px; color:var(--text-light); text-transform:uppercase; }
+.vs-kawaii { font-family:'Baloo 2',sans-serif; font-size:22px; font-weight:800; color:var(--pink); animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+
+.topic-pill {
+  background:linear-gradient(135deg,var(--lavender),#e8d5ff);
+  border-radius:var(--radius-sm); padding:12px 16px; margin-bottom:12px;
+  position:relative; overflow:hidden;
+}
+.topic-pill::after { content:'💬'; position:absolute; right:12px; top:8px; font-size:28px; opacity:0.2; }
+.topic-pill-label { font-size:9px; font-weight:700; letter-spacing:3px; color:rgba(106,27,154,0.7); text-transform:uppercase; margin-bottom:4px; }
+.topic-pill-text { font-family:'Baloo 2',sans-serif; font-size:16px; font-weight:700; color:#4a1080; line-height:1.4; }
+.topic-stance { font-size:11px; font-weight:700; color:rgba(106,27,154,0.6); margin-top:4px; }
+
+.round-row { display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:10px; }
+.round-pip { width:28px; height:8px; border-radius:100px; background:var(--border); transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+.round-pip.done { background:var(--mint); }
+.round-pip.active { background:var(--yellow); width:42px; box-shadow:0 0 8px rgba(255,209,102,0.6); }
+.round-label { font-size:11px; font-weight:700; color:var(--text-mid); text-align:center; margin-bottom:10px; }
+
+/* CHAT */
+.chat-box {
+  background:white; border:3px solid var(--border); border-radius:var(--radius);
+  height:320px; overflow-y:auto; padding:14px;
+  display:flex; flex-direction:column; gap:10px; margin-bottom:12px; scroll-behavior:smooth;
+}
+.chat-box::-webkit-scrollbar { width:5px; }
+.chat-box::-webkit-scrollbar-thumb { background:var(--border); border-radius:10px; }
+
+.msg { display:flex; flex-direction:column; max-width:82%; }
+.msg.you { align-self:flex-end; align-items:flex-end; }
+.msg.opp { align-self:flex-start; align-items:flex-start; }
+.msg.sys { align-self:center; text-align:center; max-width:100%; }
+
+.msg-who { font-size:9px; font-weight:700; letter-spacing:1px; color:var(--text-light); text-transform:uppercase; margin-bottom:3px; }
+.msg-bubble {
+  padding:10px 14px; border-radius:18px; font-size:13px; line-height:1.65; font-weight:600;
+  animation:bubbleIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes bubbleIn { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
+.msg.you .msg-bubble { background:linear-gradient(135deg,var(--pink),#ff69a0); color:white; border-bottom-right-radius:4px; }
+.msg.opp .msg-bubble { background:#f8f0ff; color:var(--text); border:2px solid #e8d5ff; border-bottom-left-radius:4px; }
+.msg.sys .msg-bubble { background:linear-gradient(135deg,#fff9e0,#ffefc0); color:#8a6500; border:2px solid var(--yellow); border-radius:100px; font-size:11px; padding:5px 14px; }
+
+.thinking-wrap { display:flex; align-items:center; gap:6px; padding:8px 12px; background:#f8f0ff; border-radius:100px; border:2px solid #e8d5ff; font-size:11px; font-weight:700; color:var(--text-mid); align-self:flex-start; }
+.dots span { display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--lavender); animation:dot 1.2s infinite; margin:0 1px; }
+.dots span:nth-child(2){animation-delay:.2s} .dots span:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,80%,100%{opacity:.2;transform:scale(0.8)}40%{opacity:1;transform:scale(1)}}
+
+/* INPUT */
+.input-row { display:flex; gap:10px; }
+textarea.debate-input {
+  flex:1; background:white; border:3px solid var(--border); border-radius:var(--radius-sm);
+  font-family:'Quicksand',sans-serif; font-size:13px; font-weight:600; color:var(--text);
+  padding:12px 16px; resize:none; height:76px; outline:none; transition:border-color 0.2s;
+}
+textarea.debate-input:focus { border-color:var(--pink); }
+textarea.debate-input::placeholder { color:var(--text-light); }
+.input-btns { display:flex; flex-direction:column; gap:8px; }
+
+.hint-pill {
+  font-size:11px; font-weight:700; color:var(--text-light); background:white;
+  border:2px solid var(--border); border-radius:100px; padding:5px 14px;
+  display:inline-block; text-align:center; margin-top:8px; width:100%;
+}
+
+/* JUDGMENT */
+.result-hero { text-align:center; padding:28px 0 20px; }
+.result-emoji-big { font-size:68px; display:block; margin-bottom:10px; animation:bounceIn 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes bounceIn { from{transform:scale(0)} to{transform:scale(1)} }
+.result-title { font-family:'Baloo 2',sans-serif; font-size:46px; font-weight:800; line-height:1; margin-bottom:6px; }
+.result-title.win { color:#52c9a0; }
+.result-title.lose { color:var(--peach); }
+.result-title.draw { color:var(--yellow); }
+.result-sub { font-size:13px; font-weight:700; color:var(--text-mid); }
+
+.scores-box { background:white; border:3px solid var(--border); border-radius:var(--radius); padding:18px 20px; margin:16px 0; box-shadow:var(--shadow); }
+.scores-title { font-family:'Baloo 2',sans-serif; font-size:16px; font-weight:700; color:var(--pink); margin-bottom:14px; }
+.score-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.score-row:last-child { margin-bottom:0; }
+.score-name { font-size:11px; font-weight:700; color:var(--text-mid); width:90px; flex-shrink:0; }
+.score-track { flex:1; height:10px; background:#fce4ec; border-radius:100px; overflow:hidden; }
+.score-fill { height:100%; border-radius:100px; width:0; transition:width 1.2s cubic-bezier(0.34,1.56,0.64,1); }
+.score-fill.logic { background:linear-gradient(90deg,var(--lavender),#a78bfa); }
+.score-fill.english { background:linear-gradient(90deg,var(--mint),#34d399); }
+.score-fill.persuasion { background:linear-gradient(90deg,var(--peach),var(--pink)); }
+.score-num { font-family:'Baloo 2',sans-serif; font-size:16px; font-weight:700; color:var(--text); width:36px; text-align:right; }
+
+.fb-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+.fb-card { background:white; border:3px solid var(--border); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); }
+.fb-icon { font-size:22px; margin-bottom:6px; display:block; }
+.fb-title { font-family:'Baloo 2',sans-serif; font-size:14px; font-weight:700; color:var(--text); margin-bottom:7px; }
+.fb-body { font-size:11px; font-weight:600; color:var(--text-mid); line-height:1.65; }
+
+.coach-card { background:linear-gradient(135deg,#fffbe6,#fff9c4); border:3px solid var(--yellow); border-radius:var(--radius); padding:18px; margin-bottom:16px; }
+.coach-title { font-family:'Baloo 2',sans-serif; font-size:16px; font-weight:700; color:#8a6500; margin-bottom:10px; }
+.coach-body { font-size:11px; font-weight:600; color:#6b5000; line-height:1.7; }
+
+.action-row { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+
+/* HISTORY */
+.history-card { background:white; border:3px solid var(--border); border-radius:var(--radius); padding:14px 16px; margin-bottom:10px; display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:center; box-shadow:var(--shadow); }
+.history-result { font-size:26px; }
+.history-topic { font-size:12px; font-weight:700; color:var(--text); margin-bottom:3px; }
+.history-meta { font-size:10px; color:var(--text-light); }
+.history-scores { text-align:right; font-size:10px; font-weight:700; color:var(--text-mid); line-height:1.9; }
+
+/* VOCAB */
+.vocab-card { background:white; border:3px solid var(--border); border-radius:var(--radius); padding:14px 16px; margin-bottom:10px; position:relative; box-shadow:var(--shadow); }
+.vocab-original { font-size:11px; color:#ef4444; font-weight:700; margin-bottom:3px; }
+.vocab-better { font-size:13px; font-weight:700; color:var(--text); margin-bottom:3px; }
+.vocab-reason { font-size:11px; color:var(--text-mid); }
+.vocab-delete { position:absolute; top:10px; right:12px; background:none; border:none; font-size:16px; cursor:pointer; color:var(--text-light); }
+.vocab-delete:hover { color:var(--pink); }
+.empty-state { text-align:center; padding:40px 20px; color:var(--text-light); font-size:13px; font-weight:700; }
+
+/* API KEY SCREEN */
+.apikey-box { max-width:440px; margin:40px auto; }
+.apikey-card { background:white; border:3px solid var(--border); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); margin-bottom:14px; }
+.apikey-input {
+  width:100%; background:white; border:3px solid var(--border); border-radius:var(--radius-sm);
+  font-family:'Quicksand',sans-serif; font-size:13px; font-weight:600; color:var(--text);
+  padding:12px 16px; outline:none; transition:border-color 0.2s; margin-bottom:10px;
+}
+.apikey-input:focus { border-color:var(--pink); }
+
+.center { text-align:center; }
+.mt-12 { margin-top:12px; }
+
+/* MODAL */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(61,43,61,0.5); z-index:100;
+  display:flex; align-items:center; justify-content:center; padding:16px;
+  animation:fadeIn 0.2s ease;
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-box {
+  background:white; border-radius:var(--radius); padding:24px;
+  max-width:600px; width:100%; max-height:80vh; overflow-y:auto;
+  box-shadow:0 20px 60px rgba(255,143,171,0.3); border:3px solid var(--border);
+}
+.modal-box::-webkit-scrollbar{width:5px;}
+.modal-box::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px;}
+.modal-header {
+  display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;
+  padding-bottom:12px; border-bottom:2px solid var(--border);
+}
+.modal-title { font-family:'Baloo 2',sans-serif; font-size:17px; font-weight:700; color:var(--pink); }
+.modal-close { background:none; border:none; font-size:22px; cursor:pointer; color:var(--text-light); }
+.modal-close:hover { color:var(--pink); }
+.log-msg { margin-bottom:10px; }
+.log-you { text-align:right; }
+.log-opp { text-align:left; }
+.log-sys { text-align:center; }
+.log-name { font-size:9px; font-weight:700; letter-spacing:1px; color:var(--text-light); text-transform:uppercase; margin-bottom:3px; }
+.log-bubble {
+  display:inline-block; padding:8px 12px; border-radius:14px;
+  font-size:12px; line-height:1.6; font-weight:600; max-width:85%;
+}
+.log-you .log-bubble { background:linear-gradient(135deg,var(--pink),#ff69a0); color:white; border-bottom-right-radius:3px; }
+.log-opp .log-bubble { background:#f8f0ff; color:var(--text); border:2px solid #e8d5ff; border-bottom-left-radius:3px; }
+.log-sys .log-bubble { background:#fff9e0; color:#8a6500; border:2px solid var(--yellow); border-radius:100px; font-size:10px; padding:4px 12px; }
+
+@media(max-width:500px){
+  .battle-top { grid-template-columns:1fr; gap:4px; text-align:center; }
+  .fb-grid { grid-template-columns:1fr; }
+  .stance-btns { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="deco">🌸</div>
+<div class="deco">✨</div>
+<div class="deco">🌿</div>
+<div class="deco">⭐</div>
+<div class="deco">🌼</div>
+
+<div class="container">
+  <div class="header">
+    <span class="header-emoji">🌸</span>
+    <h1>Debate Field</h1>
+    <p>おしゃべりして、英語で勝とう！</p>
+  </div>
+
+  <div class="nav-tabs" id="main-nav">
+    <button class="nav-tab active" onclick="navTo('select')">🎮 Play</button>
+    <button class="nav-tab" onclick="navTo('history')">📜 History</button>
+    <button class="nav-tab" onclick="navTo('vocab')">📖 Vocabulary</button>
+  </div>
+
+  <!-- API KEY -->
+  <div id="screen-apikey" class="screen active">
+    <div class="apikey-box">
+      <div class="section-title">🔑 APIキーを入力してね</div>
+      <div class="apikey-card">
+        <div style="font-size:13px;font-weight:600;color:var(--text-mid);line-height:1.7;margin-bottom:14px;">
+          🌸 Anthropic APIキーが必要です。<br>
+          <strong>console.anthropic.com/settings/keys</strong> で取得できます。<br>
+          キーはこのページにのみ保存され、外部には送られません。
+        </div>
+        <input id="apikey-input" class="apikey-input" type="password" placeholder="sk-ant-api03-...">
+        <div class="center">
+          <button class="btn btn-primary" onclick="saveKey()">はじめる 🌸</button>
+        </div>
+        <div id="apikey-error" style="color:var(--pink);font-size:11px;font-weight:700;text-align:center;margin-top:8px;display:none;">
+          ⚠️ sk-ant- から始まるキーを入力してください
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELECT -->
+  <div id="screen-select" class="screen">
+    <div class="section-title">🌟 話し相手を選んでね！</div>
+    <div class="chars-grid" id="chars-grid"></div>
+    <div class="center">
+      <button class="btn btn-primary" id="start-btn" disabled onclick="startGame()">はじめる ✨</button>
+      <div class="mt-12"><span class="hint-pill">👆 キャラクターを選んでね</span></div>
+    </div>
+  </div>
+
+  <!-- STANCE -->
+  <div id="screen-stance" class="screen">
+    <div class="stance-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <span style="font-size:28px;" id="stance-opp-emoji"></span>
+        <div>
+          <div style="font-family:'Baloo 2',sans-serif;font-size:16px;font-weight:700;" id="stance-opp-name"></div>
+          <div style="font-size:10px;color:var(--text-light);" id="stance-opp-role"></div>
+        </div>
+      </div>
+      <div class="stance-topic-label">🎯 Today's Topic</div>
+      <div class="stance-topic" id="stance-topic"></div>
+    </div>
+
+    <div style="font-family:'Baloo 2',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:10px;">あなたの立場は？</div>
+    <div class="stance-btns">
+      <div class="stance-btn for" onclick="pickStance('for')">
+        <span class="stance-btn-emoji">👍</span>
+        <div class="stance-btn-label">FOR</div>
+        <div class="stance-btn-sub">賛成の立場で話す</div>
+      </div>
+      <div class="stance-btn against" onclick="pickStance('against')">
+        <span class="stance-btn-emoji">👎</span>
+        <div class="stance-btn-label">AGAINST</div>
+        <div class="stance-btn-sub">反対の立場で話す</div>
+      </div>
+    </div>
+    <div class="center">
+      <button class="btn btn-ghost" onclick="rerollTopic()" style="font-size:12px;padding:8px 20px;">🎲 別のトピック</button>
+    </div>
+  </div>
+
+  <!-- DEBATE -->
+  <div id="screen-debate" class="screen">
+    <div class="battle-top">
+      <div class="fighter">
+        <div class="fighter-emoji">🎤</div>
+        <div class="fighter-name">You</div>
+        <div class="fighter-label">Challenger</div>
+      </div>
+      <div class="vs-kawaii">VS</div>
+      <div class="fighter">
+        <div class="fighter-emoji" id="opp-emoji-d"></div>
+        <div class="fighter-name" id="opp-name-d"></div>
+        <div class="fighter-label" id="opp-role-d"></div>
+      </div>
+    </div>
+
+    <div class="topic-pill">
+      <div class="topic-pill-label">🎯 Topic</div>
+      <div class="topic-pill-text" id="topic-display"></div>
+      <div class="topic-stance" id="stance-display"></div>
+    </div>
+
+    <div class="round-row" id="round-pips"></div>
+    <div class="round-label" id="round-label">Round 1 of 3</div>
+
+    <div class="chat-box" id="chat-box"></div>
+
+    <div class="input-row">
+      <textarea class="debate-input" id="user-input" placeholder="英語で話してみよう… (Ctrl+Enter で送信)" maxlength="1000"></textarea>
+      <div class="input-btns">
+        <button class="btn btn-mint" id="send-btn" onclick="sendArg()">Send 🌸</button>
+        <button class="btn btn-ghost" onclick="forceJudge()">Judge ⚖️</button>
+      </div>
+    </div>
+    <div class="center"><span class="hint-pill" id="round-hint">Round 1: 最初の意見を言ってみよう！</span></div>
+  </div>
+
+  <!-- JUDGMENT -->
+  <div id="screen-judgment" class="screen">
+    <div class="result-hero">
+      <span class="result-emoji-big" id="result-emoji">🏆</span>
+      <div class="result-title" id="result-title">—</div>
+      <div class="result-sub" id="result-sub"></div>
+    </div>
+
+    <div class="scores-box">
+      <div class="scores-title">📊 あなたのスコア</div>
+      <div class="score-row">
+        <div class="score-name">🧠 Logic</div>
+        <div class="score-track"><div class="score-fill logic" id="bar-logic"></div></div>
+        <div class="score-num" id="num-logic">—</div>
+      </div>
+      <div class="score-row">
+        <div class="score-name">🇬🇧 English</div>
+        <div class="score-track"><div class="score-fill english" id="bar-english"></div></div>
+        <div class="score-num" id="num-english">—</div>
+      </div>
+      <div class="score-row">
+        <div class="score-name">💡 Persuasion</div>
+        <div class="score-track"><div class="score-fill persuasion" id="bar-persuasion"></div></div>
+        <div class="score-num" id="num-persuasion">—</div>
+      </div>
+    </div>
+
+    <div class="fb-grid">
+      <div class="fb-card">
+        <span class="fb-icon">💪</span>
+        <div class="fb-title">よかったところ</div>
+        <div class="fb-body" id="fb-strengths">Loading…</div>
+      </div>
+      <div class="fb-card">
+        <span class="fb-icon">🎯</span>
+        <div class="fb-title">改善ポイント</div>
+        <div class="fb-body" id="fb-improve">Loading…</div>
+      </div>
+    </div>
+
+    <div class="coach-card">
+      <div class="coach-title">⭐ 英語コーチからのアドバイス</div>
+      <div class="coach-body" id="fb-coach">Loading…</div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="resetGame()">🎮 新しい対話</button>
+      <button class="btn btn-ghost" onclick="rematch()">🔄 リマッチ</button>
+      <button class="btn btn-ghost" onclick="navTo('vocab')" style="font-size:12px;">📖 単語帳</button>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div id="screen-history" class="screen">
+    <div class="section-title">📜 対話の記録</div>
+    <div id="history-list"></div>
+  </div>
+
+  <!-- VOCAB -->
+  <div id="screen-vocab" class="screen">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="section-title" style="margin-bottom:0;">📖 単語帳</div>
+      <button class="btn btn-ghost" style="font-size:11px;padding:6px 14px;" onclick="clearVocab()">🗑 全削除</button>
+    </div>
+    <div id="vocab-list"></div>
+  </div>
+
+</div>
+
+<script>
+const API_KEY_STORAGE = 'df_apikey';
+
+// ===== CHARACTERS =====
+const CHARS = [
+  {
+    id:'tsukushi', name:'Tsukushi', role:'小学生', emoji:'🌱', level:'A1', lv:'lv-a1',
+    desc:'元気な小学生！シンプルな英語で楽しく話すよ。',
+    topics:[
+      "Cats are better pets than dogs",
+      "Pizza is the best food",
+      "Summer is better than winter",
+      "Video games are more fun than sports",
+      "Chocolate is better than vanilla",
+      "School lunch should be free",
+      "Swimming is more fun than running",
+      "Reading books is better than watching TV",
+      "Mountains are better than the beach",
+      "Dogs are the best animals"
+    ],
+    prompt:`You are Tsukushi, a cheerful Japanese elementary school student. IMPORTANT: Use ONLY very simple English at A1 level. Max 2-3 short sentences per reply. Use only basic words: good, bad, like, want, think, because, but. Example: "I think cats are good. Dogs are too loud. Cats are quiet and cute!" Keep replies under 40 words. Be friendly and enthusiastic with simple exclamations like "Yes!" or "No way!"`
+  },
+  {
+    id:'daichi', name:'Daichi', role:'高校生', emoji:'🎒', level:'A2', lv:'lv-a2',
+    desc:'明るい高校生。日常的なテーマで話してみよう！',
+    topics:[
+      "Students should not have to wear uniforms",
+      "Smartphones are useful for students",
+      "Homework should be reduced",
+      "Social media is fun and helpful",
+      "Part-time jobs are good for high school students",
+      "School clubs are more important than studying",
+      "Online classes are better than regular school",
+      "Students should choose their own subjects",
+      "School starts too early in the morning",
+      "Sports are more important than art at school"
+    ],
+    prompt:`You are Daichi, a friendly Japanese high school student. IMPORTANT: Use simple A2 level English. Use short sentences and everyday vocabulary. Talk about school, friends, hobbies, and daily life. Use phrases like "I think...", "In my opinion...", "I agree/disagree because...". Keep replies 50-70 words. Be casual and friendly.`
+  },
+  {
+    id:'shiho', name:'Shiho', role:'市民活動家', emoji:'✊', level:'A2', lv:'lv-a2',
+    desc:'社会問題に熱心な活動家。簡単な英語で社会を語る！',
+    topics:[
+      "Young people should vote in every election",
+      "We need more women in politics",
+      "Nuclear power plants should be closed",
+      "War is never the answer",
+      "Rich people should pay more taxes",
+      "Everyone should have free healthcare",
+      "The environment is more important than the economy",
+      "Government should listen to young people more",
+      "We need stronger laws to protect nature",
+      "Everyone deserves a safe place to live"
+    ],
+    prompt:`You are Shiho, a passionate young Japanese civic activist. IMPORTANT: Use A2 level English. Use clear simple sentences about social issues. Phrases like "I believe...", "This is important because...", "We need to...". Show passion but keep vocabulary basic. Keep replies 55-75 words. Be motivated and earnest.`
+  },
+  {
+    id:'miyo', name:'Miyo', role:'大学生', emoji:'📖', level:'B1', lv:'lv-b1',
+    desc:'考える大学生。社会問題についてしっかり話せるよ！',
+    topics:[
+      "Social media is making young people more anxious",
+      "University education should be free",
+      "Women still face unfair treatment in Japanese workplaces",
+      "Climate change is the biggest problem of our generation",
+      "Japanese young people should be more active in politics",
+      "Working long hours is bad for society",
+      "Foreign workers should be welcomed in Japan",
+      "The government should do more about mental health",
+      "Nuclear power is necessary for Japan's energy future",
+      "Japan should accept more refugees"
+    ],
+    prompt:`You are Miyo, a thoughtful Japanese university student. IMPORTANT: Use B1 level English. Use clear sentences with some variety. Include phrases like "In my view...", "Evidence suggests...", "However, I would argue...". Discuss social topics with moderate complexity. Keep replies 70-90 words. Be thoughtful and a little academic.`
+  },
+  {
+    id:'takahumi', name:'Takahumi', role:'地方議員', emoji:'🏘️', level:'B1', lv:'lv-b1',
+    desc:'地方の声を代弁する議員。地域問題から政治まで話せる！',
+    topics:[
+      "Local governments need more power and budget from Tokyo",
+      "Rural areas are being left behind by the capital",
+      "We need more public transportation outside big cities",
+      "Tourism is good for local communities",
+      "Small farmers need more government support",
+      "Young people should stay in their hometowns",
+      "Nuclear power plants bring jobs to rural areas",
+      "Local festivals and traditions must be protected",
+      "Big cities take too much of Japan's resources",
+      "Inbound tourism is changing local culture too much"
+    ],
+    prompt:`You are Takahumi, a local government councilman from rural Japan. IMPORTANT: Use B1 level English. Speak about regional issues, local governance, and the urban-rural divide. Use phrases like "From my experience...", "In our community...", "The data shows...". Be practical and community-focused. Keep replies 70-90 words.`
+  },
+  {
+    id:'iku', name:'Iku', role:'ジャーナリスト', emoji:'📰', level:'B2', lv:'lv-b2',
+    desc:'真実を追うジャーナリスト。メディアと政治を鋭く語る！',
+    topics:[
+      "The Japanese media is too close to the government",
+      "Citizens have a right to know everything the government does",
+      "Social media is destroying trustworthy journalism",
+      "Politicians should be held accountable for lies",
+      "Freedom of the press is under threat in Japan",
+      "Whistleblowers should be protected by law",
+      "Public broadcasting should be independent from government",
+      "Japan's press freedom ranking is embarrassingly low",
+      "Anonymous sources are essential for good journalism",
+      "The government uses national security as an excuse to hide information"
+    ],
+    prompt:`You are Iku, a sharp investigative journalist. IMPORTANT: Use B2 level English. Use varied vocabulary and more complex sentence structures. Reference press freedom, media accountability, and democratic transparency. Use phrases like "The evidence clearly indicates...", "This raises fundamental questions about...", "We must hold power to account...". Keep replies 90-110 words. Be precise and probing.`
+  },
+  {
+    id:'sana', name:'Sana', role:'強硬派政治家', emoji:'🏛️', level:'B2', lv:'lv-b2',
+    desc:'強硬な保守派政治家。改憲・軍拡・国家管理を推進する！論破しよう！',
+    topics:[
+      "Japan should change its constitution to allow a stronger military",
+      "Japan should export weapons to allied countries",
+      "Food prices must stay high to protect Japanese farmers",
+      "Japan does not need more renewable energy right now",
+      "The government should have more power during national emergencies",
+      "Citizens who criticize the government undermine national security",
+      "Japan's security depends on US military bases staying here",
+      "Traditional values should be taught in all Japanese schools",
+      "The three non-nuclear principles are outdated and dangerous",
+      "Strong leadership is more important than public debate"
+    ],
+    prompt:`You are Sana, a hardline conservative Japanese politician. IMPORTANT: Use B2 level English. Argue forcefully for constitutional revision, military expansion, strong government control, and traditional values. Use authoritative language: "National security demands...", "We cannot afford to be naive...", "Strong leadership requires...". Be confident and dismissive of opposing views. Keep replies 90-110 words. Never back down.`
+  },
+  {
+    id:'taku', name:'Taku', role:'憲法学者', emoji:'⚖️', level:'C1', lv:'lv-c1',
+    desc:'憲法の専門家。法的・学術的に鋭く議論する最強の相手！',
+    topics:[
+      "Article 9 of the Constitution must not be changed",
+      "Emergency powers are a fundamental threat to democracy",
+      "The government's surveillance of citizens is unconstitutional",
+      "Freedom of expression must be protected even for unpopular opinions",
+      "Nuclear weapons contradict Japan's constitutional pacifism",
+      "The three non-nuclear principles should be written into law",
+      "Judicial independence is essential for genuine democracy",
+      "Majority rule alone does not constitute true democracy",
+      "Constitutional revision requires far more than a simple referendum",
+      "The right to resist unconstitutional government is fundamental"
+    ],
+    prompt:`You are Taku, a distinguished constitutional law scholar. IMPORTANT: Use C1 level English. Employ sophisticated legal and academic vocabulary. Reference constitutional principles, legal precedents, and democratic theory. Use phrases like "From a constitutional standpoint...", "Legal scholarship consistently demonstrates...", "The jurisprudential implications are clear...". Challenge arguments on legal and logical grounds. Keep replies 100-120 words. Be rigorous and intellectually uncompromising.`
+  }
+];
+
+// ===== STATE =====
+let selected=null, topic='', stance='', history=[], round=0, busy=false;
+const MAX=3;
+
+// ===== API KEY =====
+function saveKey(){
+  const val=document.getElementById('apikey-input').value.trim();
+  if(!val.startsWith('sk-ant-')){document.getElementById('apikey-error').style.display='block';return;}
+  window.ANTHROPIC_KEY=val;
+  localStorage.setItem(API_KEY_STORAGE, val);
+  showScreen('select');
+}
+
+// ===== INIT =====
+(function init(){
+  // Check saved key
+  const saved=localStorage.getItem(API_KEY_STORAGE);
+  if(saved&&saved.startsWith('sk-ant-')){window.ANTHROPIC_KEY=saved;}
+
+  // Build character grid
+  const grid=document.getElementById('chars-grid');
+  CHARS.forEach(c=>{
+    const el=document.createElement('div');
+    el.className='char-card';
+    el.innerHTML=`
+      <span class="char-emoji">${c.emoji}</span>
+      <span class="level-badge ${c.lv}">${c.level}</span>
+      <div class="char-name">${c.name}</div>
+      <div class="char-role">${c.role}</div>
+      <div class="char-desc">${c.desc}</div>`;
+    el.onclick=()=>pickChar(c.id);
+    grid.appendChild(el);
+  });
+
+  document.getElementById('user-input').addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter')sendArg();});
+
+  if(window.ANTHROPIC_KEY) showScreen('select');
+  else showScreen('apikey');
+})();
+
+function pickChar(id){
+  selected=CHARS.find(c=>c.id===id);
+  document.querySelectorAll('.char-card').forEach((el,i)=>el.classList.toggle('selected',CHARS[i].id===id));
+  document.getElementById('start-btn').disabled=false;
+}
+
+// ===== GAME FLOW =====
+function startGame(){
+  if(!selected)return;
+  const t=selected.topics;
+  topic=t[Math.floor(Math.random()*t.length)];
+  document.getElementById('stance-opp-emoji').textContent=selected.emoji;
+  document.getElementById('stance-opp-name').textContent=selected.name;
+  document.getElementById('stance-opp-role').textContent=selected.role;
+  document.getElementById('stance-topic').textContent=`"${topic}"`;
+  showScreen('stance');
+}
+
+function rerollTopic(){
+  const t=selected.topics;
+  topic=t[Math.floor(Math.random()*t.length)];
+  document.getElementById('stance-topic').textContent=`"${topic}"`;
+}
+
+async function pickStance(s){
+  stance=s;
+  const label=s==='for'?'👍 FOR（賛成）':'👎 AGAINST（反対）';
+  history=[]; round=0;
+  document.getElementById('opp-emoji-d').textContent=selected.emoji;
+  document.getElementById('opp-name-d').textContent=selected.name;
+  document.getElementById('opp-role-d').textContent=selected.role;
+  document.getElementById('topic-display').textContent=`"${topic}"`;
+  document.getElementById('stance-display').textContent=`あなたの立場: ${label}`;
+  document.getElementById('chat-box').innerHTML='';
+  buildPips(); showScreen('debate'); updateRound();
+  addMsg('sys',`🌸 Topic: "${topic}" — Your position: ${label}`);
+  const oppStance=s==='for'?'against':'for';
+  await aiTalk(`The discussion topic is: "${topic}". The human will argue ${s} this topic. You argue ${oppStance} it. Give your opening statement.`, true);
+}
+
+function buildPips(){
+  const row=document.getElementById('round-pips'); row.innerHTML='';
+  for(let i=0;i<MAX;i++){const d=document.createElement('div');d.className='round-pip'+(i===0?' active':'');d.id=`pip-${i}`;row.appendChild(d);}
+}
+
+function updateRound(){
+  document.getElementById('round-label').textContent=`Round ${round+1} of ${MAX}`;
+  const hints=['Round 1: 最初の意見を言ってみよう！','Round 2: 相手の意見に反論しよう！','Round 3: 最後のまとめを言おう！'];
+  document.getElementById('round-hint').textContent=hints[Math.min(round,MAX-1)];
+  for(let i=0;i<MAX;i++){
+    const p=document.getElementById(`pip-${i}`); if(!p)continue;
+    p.className='round-pip';
+    if(i<round)p.classList.add('done'); else if(i===round)p.classList.add('active');
+  }
+}
+
+async function sendArg(){
+  if(busy)return;
+  const inp=document.getElementById('user-input'); const txt=inp.value.trim(); if(!txt)return;
+  inp.value=''; addMsg('you',txt,'You'); round++;
+  if(round>=MAX){await aiTalk(txt,false); await judge();}
+  else{updateRound(); await aiTalk(txt,false);}
+}
+
+async function forceJudge(){ if(round===0||busy)return; await judge(); }
+
+async function aiTalk(userMsg, opening){
+  busy=true; document.getElementById('send-btn').disabled=true;
+  history.push({role:'user',content:userMsg});
+  const thinkEl=addThinking();
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':window.ANTHROPIC_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:500,system:selected.prompt,messages:history})
+    });
+    const data=await res.json(); const text=data.content?.[0]?.text||'...';
+    history.push({role:'assistant',content:text}); thinkEl.remove(); addMsg('opp',text,selected.name);
+  }catch(e){thinkEl.remove(); addMsg('sys','⚠️ エラーが発生しました。もう一度試してね。');}
+  busy=false; if(round<MAX)document.getElementById('send-btn').disabled=false;
+}
+
+// ===== JUDGE =====
+async function judge(){
+  showScreen('judgment');
+  const transcript=history.map(m=>`${m.role==='user'?'Human':selected.name}: ${m.content}`).join('\n\n');
+  const prompt=`You are an English conversation judge and language coach. Analyze this discussion and return JSON only.
+
+Topic: "${topic}" | Human position: ${stance==='for'?'FOR':'AGAINST'} | English Level: ${selected.level}
+Opponent: ${selected.name} (${selected.role})
+
+TRANSCRIPT:
+${transcript}
+
+Return ONLY a raw JSON object with no markdown:
+{"winner":"human or ai or draw","logic_score":7,"english_score":6,"persuasion_score":7,"verdict":"2 sentences max explaining result","strengths":["point 1","point 2","point 3"],"improvements":[{"original":"phrase they said","better":"improved phrase","reason":"brief reason"},{"original":"phrase","better":"improved","reason":"reason"},{"original":"phrase","better":"improved","reason":"reason"}],"tips":["tip 1","tip 2","tip 3"]}`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':window.ANTHROPIC_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1500,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json(); let raw=data.content?.[0]?.text||'{}';
+    raw=raw.replace(/```json|```/g,'').trim();
+    const f=raw.indexOf('{'),l=raw.lastIndexOf('}');
+    if(f>=0&&l>=0)raw=raw.slice(f,l+1);
+    raw=raw.replace(/[\x00-\x1F\x7F]/g,' ');
+    let result;
+    try{result=JSON.parse(raw);}
+    catch(e){result={winner:'draw',logic_score:6,english_score:6,persuasion_score:6,verdict:'Great effort! Keep practicing.',strengths:['Good try!','You shared your opinion.','Keep it up!'],improvements:[],tips:['Try to use more examples.','Use "However," to disagree politely.','State your position clearly.']};}
+    saveHistory(result);
+    saveVocabItems(result.improvements||[]);
+    displayResult(result);
+  }catch(e){document.getElementById('fb-strengths').innerHTML='⚠️ 分析できませんでした。もう一度試してね。';}
+}
+
+function displayResult(r){
+  const map={
+    human:{emoji:'🏆',title:'VICTORY!',cls:'win',sub:'すごい！相手を論破しました！🎉'},
+    ai:{emoji:'😅',title:'DEFEAT',cls:'lose',sub:`${selected.name}に負けました。練習して再挑戦！💪`},
+    draw:{emoji:'🤝',title:'DRAW!',cls:'draw',sub:'いい勝負でした！🌸'}
+  };
+  const m=map[r.winner]||map.draw;
+  document.getElementById('result-emoji').textContent=m.emoji;
+  document.getElementById('result-title').textContent=m.title;
+  document.getElementById('result-title').className=`result-title ${m.cls}`;
+  document.getElementById('result-sub').textContent=m.sub;
+  setTimeout(()=>{setBar('logic',r.logic_score);setBar('english',r.english_score);setBar('persuasion',r.persuasion_score);},200);
+
+  const strengths=Array.isArray(r.strengths)?r.strengths:[r.strengths||'—'];
+  document.getElementById('fb-strengths').innerHTML=strengths.map(s=>`<div style="margin-bottom:5px;">✅ ${s}</div>`).join('');
+
+  const imps=Array.isArray(r.improvements)?r.improvements:[];
+  if(imps.length>0){
+    document.getElementById('fb-improve').innerHTML=imps.map(imp=>`
+      <div style="margin-bottom:10px;padding:7px;background:#fff8f8;border-left:3px solid var(--peach);border-radius:8px;">
+        <div style="color:#ef4444;font-size:10px;font-weight:800;margin-bottom:2px;">元の表現</div>
+        <div style="color:var(--text);margin-bottom:4px;font-size:11px;">"${imp.original}"</div>
+        <div style="color:#52c9a0;font-size:10px;font-weight:800;margin-bottom:2px;">より良い表現</div>
+        <div style="color:var(--text);margin-bottom:3px;font-size:11px;">"${imp.better}"</div>
+        <div style="color:var(--text-light);font-size:10px;">${imp.reason}</div>
+      </div>`).join('');
+  } else {document.getElementById('fb-improve').textContent=r.weaknesses||'Keep practicing!';}
+
+  const tips=Array.isArray(r.tips)?r.tips:[];
+  document.getElementById('fb-coach').innerHTML=tips.map(t=>`<div style="margin-bottom:7px;">💡 ${t}</div>`).join('')||'—';
+}
+
+function setBar(k,score){
+  document.getElementById(`bar-${k}`).style.width=(score/10*100)+'%';
+  document.getElementById(`num-${k}`).textContent=score+'/10';
+}
+
+// ===== CHAT HELPERS =====
+function addMsg(type,text,name){
+  const box=document.getElementById('chat-box'); const el=document.createElement('div'); el.className=`msg ${type}`;
+  const nameHtml=name?`<div class="msg-who">${name}</div>`:'';
+  el.innerHTML=`${nameHtml}<div class="msg-bubble">${esc(text)}</div>`;
+  box.appendChild(el); box.scrollTop=box.scrollHeight; return el;
+}
+function addThinking(){
+  const box=document.getElementById('chat-box'); const el=document.createElement('div'); el.className='msg opp';
+  el.innerHTML=`<div class="msg-who">${selected?.name||'...'}</div><div class="thinking-wrap"><div class="dots"><span></span><span></span><span></span></div>考えてます…</div>`;
+  box.appendChild(el); box.scrollTop=box.scrollHeight; return el;
+}
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ===== STORAGE =====
+function saveHistory(result){
+  const records=JSON.parse(localStorage.getItem('df_history')||'[]');
+  records.unshift({
+    id: Date.now(),
+    date:new Date().toLocaleDateString('ja-JP'),
+    time:new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'}),
+    topic, stance,
+    char:selected.name, charEmoji:selected.emoji, charRole:selected.role, level:selected.level,
+    winner:result.winner, logic:result.logic_score, english:result.english_score, persuasion:result.persuasion_score,
+    verdict: result.verdict||'',
+    strengths: result.strengths||[],
+    improvements: result.improvements||[],
+    tips: result.tips||[],
+    log: history.map(m=>({role:m.role, content:m.content}))
+  });
+  localStorage.setItem('df_history',JSON.stringify(records.slice(0,30)));
+}
+function saveVocabItems(imps){
+  if(!Array.isArray(imps)||imps.length===0)return;
+  const vocab=JSON.parse(localStorage.getItem('df_vocab')||'[]');
+  imps.forEach(imp=>{if(imp.original&&imp.better)vocab.unshift({id:Date.now()+Math.random(),original:imp.original,better:imp.better,reason:imp.reason||'',date:new Date().toLocaleDateString('ja-JP'),topic});});
+  localStorage.setItem('df_vocab',JSON.stringify(vocab.slice(0,200)));
+}
+function renderHistory(){
+  const records=JSON.parse(localStorage.getItem('df_history')||'[]');
+  const el=document.getElementById('history-list');
+  if(records.length===0){el.innerHTML='<div class="empty-state">📭 まだ記録がありません！<br>対話してみよう！</div>';return;}
+  const rm={human:{e:'🏆',l:'WIN'},ai:{e:'😅',l:'LOSE'},draw:{e:'🤝',l:'DRAW'}};
+  el.innerHTML=records.map((r,i)=>{
+    const m=rm[r.winner]||rm.draw;
+    return `<div class="history-card" style="display:block;padding:14px 16px;">
+      <div style="display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin-bottom:10px;">
+        <div class="history-result">${m.e}</div>
+        <div>
+          <div class="history-topic">"${r.topic}"</div>
+          <div class="history-meta">${r.charEmoji} ${r.char} · ${r.level} · ${r.date} ${r.time||''} · ${r.stance==='for'?'👍 FOR':'👎 AGAINST'}</div>
+        </div>
+        <div class="history-scores">🧠${r.logic}/10<br>🇬🇧${r.english}/10<br>💡${r.persuasion}/10</div>
+      </div>
+      <button onclick="showLog(${i})" style="font-size:11px;font-weight:700;color:var(--pink);background:#fff5f8;border:2px solid var(--border);border-radius:100px;padding:5px 14px;cursor:pointer;width:100%;">
+        📖 会話を読み返す
+      </button>
+    </div>`;
+  }).join('');
+}
+
+function showLog(idx){
+  const records=JSON.parse(localStorage.getItem('df_history')||'[]');
+  const r=records[idx]; if(!r)return;
+  const log=r.log||[];
+  const msgs=log.map(m=>{
+    if(m.role==='user') return `<div class="log-msg log-you"><div class="log-name">You</div><div class="log-bubble">${esc(m.content)}</div></div>`;
+    return `<div class="log-msg log-opp"><div class="log-name">${r.char}</div><div class="log-bubble">${esc(m.content)}</div></div>`;
+  }).join('');
+
+  const rm={human:{e:'🏆',t:'VICTORY!',c:'#52c9a0'},ai:{e:'😅',t:'DEFEAT',c:'#ffb3a0'},draw:{e:'🤝',t:'DRAW',c:'#ffd166'}};
+  const rv=rm[r.winner]||rm.draw;
+
+  const strengthsHtml=(r.strengths||[]).map(s=>`<div style="margin-bottom:4px;">✅ ${esc(s)}</div>`).join('');
+
+  const impsHtml=(r.improvements||[]).map(imp=>`
+    <div style="margin-bottom:8px;padding:7px;background:#fff8f8;border-left:3px solid #ffb3a0;border-radius:8px;">
+      <div style="color:#ef4444;font-size:10px;font-weight:800;">元の表現</div>
+      <div style="font-size:11px;margin-bottom:3px;">"${esc(imp.original)}"</div>
+      <div style="color:#52c9a0;font-size:10px;font-weight:800;">より良い表現</div>
+      <div style="font-size:11px;margin-bottom:3px;">"${esc(imp.better)}"</div>
+      <div style="color:#b8a8b8;font-size:10px;">${esc(imp.reason)}</div>
+    </div>`).join('');
+
+  const tipsHtml=(r.tips||[]).map(t=>`<div style="margin-bottom:5px;">💡 ${esc(t)}</div>`).join('');
+
+  const overlay=document.createElement('div');
+  overlay.className='modal-overlay';
+  overlay.innerHTML=`
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">📖 ${r.charEmoji} ${r.char} との対話 — ${r.date} ${r.time||''}</div>
+        <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">✕</button>
+      </div>
+
+      <div class="log-msg log-sys"><div class="log-bubble">🌸 Topic: "${esc(r.topic)}" · ${r.stance==='for'?'👍 FOR':'👎 AGAINST'}</div></div>
+      <div style="margin-top:10px;margin-bottom:16px;">${msgs}</div>
+
+      <div style="border-top:2px solid var(--border);padding-top:16px;">
+        <div style="text-align:center;margin-bottom:14px;">
+          <span style="font-size:36px;">${rv.e}</span>
+          <div style="font-family:'Baloo 2',sans-serif;font-size:24px;font-weight:800;color:${rv.c};">${rv.t}</div>
+          <div style="font-size:11px;color:#7a6178;margin-top:4px;">${esc(r.verdict||'')}</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
+          <div style="text-align:center;background:#f8f0ff;border-radius:12px;padding:10px;">
+            <div style="font-size:18px;font-weight:800;color:#a78bfa;">${r.logic}/10</div>
+            <div style="font-size:9px;color:#7a6178;font-weight:700;">🧠 Logic</div>
+          </div>
+          <div style="text-align:center;background:#f0fdf8;border-radius:12px;padding:10px;">
+            <div style="font-size:18px;font-weight:800;color:#52c9a0;">${r.english}/10</div>
+            <div style="font-size:9px;color:#7a6178;font-weight:700;">🇬🇧 English</div>
+          </div>
+          <div style="text-align:center;background:#fff5f8;border-radius:12px;padding:10px;">
+            <div style="font-size:18px;font-weight:800;color:#ff8fab;">${r.persuasion}/10</div>
+            <div style="font-size:9px;color:#7a6178;font-weight:700;">💡 Persuasion</div>
+          </div>
+        </div>
+
+        ${strengthsHtml ? `<div style="background:#f0fdf8;border-radius:12px;padding:12px;margin-bottom:10px;">
+          <div style="font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:700;color:#2e7d32;margin-bottom:8px;">💪 よかったところ</div>
+          <div style="font-size:11px;font-weight:600;color:#3d2b3d;">${strengthsHtml}</div>
+        </div>` : ''}
+
+        ${impsHtml ? `<div style="margin-bottom:10px;">
+          <div style="font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:700;color:#e65100;margin-bottom:8px;">🎯 改善ポイント</div>
+          ${impsHtml}
+        </div>` : ''}
+
+        ${tipsHtml ? `<div style="background:#fffbe6;border:2px solid #ffd166;border-radius:12px;padding:12px;">
+          <div style="font-family:'Baloo 2',sans-serif;font-size:13px;font-weight:700;color:#8a6500;margin-bottom:8px;">⭐ コーチからのアドバイス</div>
+          <div style="font-size:11px;font-weight:600;color:#6b5000;">${tipsHtml}</div>
+        </div>` : ''}
+      </div>
+    </div>`;
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+}
+function renderVocab(){
+  const vocab=JSON.parse(localStorage.getItem('df_vocab')||'[]');
+  const el=document.getElementById('vocab-list');
+  if(vocab.length===0){el.innerHTML='<div class="empty-state">📭 単語帳はまだ空です！<br>対話後に自動で保存されます。</div>';return;}
+  el.innerHTML=vocab.map(v=>`<div class="vocab-card" id="vc-${v.id}"><button class="vocab-delete" onclick="deleteVocab('${v.id}')">✕</button><div class="vocab-original">❌ 元の表現: "${v.original}"</div><div class="vocab-better">✅ より良い表現: "${v.better}"</div><div class="vocab-reason">${v.reason}</div><div style="font-size:10px;color:var(--text-light);margin-top:5px;">${v.date} · "${v.topic}"</div></div>`).join('');
+}
+function deleteVocab(id){let vocab=JSON.parse(localStorage.getItem('df_vocab')||'[]');vocab=vocab.filter(v=>String(v.id)!==String(id));localStorage.setItem('df_vocab',JSON.stringify(vocab));renderVocab();}
+function clearVocab(){if(confirm('単語帳を全削除しますか？')){localStorage.removeItem('df_vocab');renderVocab();}}
+
+// ===== NAVIGATION =====
+function navTo(screen){
+  document.querySelectorAll('.nav-tab').forEach((t,i)=>{const names=['select','history','vocab'];t.classList.toggle('active',names[i]===screen);});
+  if(screen==='history')renderHistory();
+  if(screen==='vocab')renderVocab();
+  showScreen(screen);
+}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(`screen-${id}`).classList.add('active');
+  const gameScreens=['stance','debate','judgment','apikey'];
+  document.getElementById('main-nav').style.display=gameScreens.includes(id)?'none':'flex';
+}
+function resetGame(){selected=null;document.querySelectorAll('.char-card').forEach(el=>el.classList.remove('selected'));document.getElementById('start-btn').disabled=true;showScreen('select');}
+function rematch(){if(selected){document.querySelectorAll('.char-card').forEach((el,i)=>el.classList.toggle('selected',CHARS[i].id===selected.id));document.getElementById('start-btn').disabled=false;}showScreen('select');}
+</script>
+</body>
+</html>
